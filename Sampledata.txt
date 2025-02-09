@@ -1,0 +1,8 @@
+-- Insert sample data into the Products table
+INSERT INTO [dbo].[Products] (ProductID, ProductCode, ManufacturerID, ProductName, Description, Category, WholesalePrice, RetailPrice, Quantity, RetailCurrency, WholeSaleCurrency, ShippingCost, CreatedOn, UpdatedOn, IsActive)
+VALUES
+(NEWID(), 'P001', NEWID(), 'Laptop', 'High performance laptop', 1, 800.00, 1000.00, 50, 'USD', 'USD', 25.00, GETDATE(), GETDATE(), 1),
+(NEWID(), 'P002', NEWID(), 'Smartphone', 'Latest model smartphone', 2, 500.00, 700.00, 100, 'USD', 'USD', 15.00, GETDATE(), GETDATE(), 1),
+(NEWID(), 'P003', NEWID(), 'Headphones', 'Noise-cancelling headphones', 3, 100.00, 150.00, 200, 'USD', 'USD', 10.00, GETDATE(), GETDATE(), 1),
+(NEWID(), 'P004', NEWID(), 'Tablet', '10-inch display tablet', 1, 250.00, 350.00, 75, 'USD', 'USD', 20.00, GETDATE(), GETDATE(), 1),
+(NEWID(), 'P005', NEWID(), 'Smartwatch', 'Water-resistant smartwatch', 2, 150.00, 200.00, 120, 'USD', 'USD', 12.00, GETDATE(), GETDATE(), 1);

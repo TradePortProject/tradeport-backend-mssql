@@ -1,0 +1,9 @@
+services:
+  mssql:
+    build: ./tradeport-backend-mssql
+    ports:
+      - "1433:1433"
+
+
+volumes:
+  mssql-data:
