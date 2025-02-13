@@ -28,7 +28,7 @@ jobs:
           context: .
           file: ../tradeport-backend-mssql/Dockerfile
           push: true
-          tags: e1509819/tradeport-backend-mssql:latest  
+          tags: prabhulalithakrishnan/tradeport-backend-mssql:latest  
 
   deploy:
     name: Deploy using Docker Compose and Railway
