@@ -59,9 +59,8 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: railway login
 
+      - name: Configure Railway Token
+        run: railway configure token ${{ secrets.RAILWAY_TOKEN }}
+
       - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          export RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
-          railway up
+        run: railway deploy
