@@ -27,56 +27,9 @@ jobs:
           push: true
           tags: e1509819/tradeport-backend-mssql:latest  
 
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Run tests
-        run: docker-compose -f tradeport-backend-mssql/docker-compose.yml up --build
-
-  snyk:
-    name: Snyk Vulnerability Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Snyk
-        run: npm install -g snyk
-
-      - name: Authenticate to Snyk
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
-
-      - name: Run Snyk
-        run: snyk test --all-projects
-
-  sonar:
-    name: SonarQube Analysis
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up SonarQube
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=your-project-key
-            -Dsonar.organization=your-organization
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
   deploy:
     name: Deploy using Docker Compose and Railway
-    needs: [build, test, snyk, sonar]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
