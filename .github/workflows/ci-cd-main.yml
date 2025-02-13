@@ -54,15 +54,10 @@ jobs:
       - name: Install Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
 
-      - name: Initialize Railway Project
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway init
-          railway link --team <id> --project ac04fff6-5dfc-4b8d-9e0c-ff23a5464df6 --environment production --service <id>
-
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up
+        run: |
+          export RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
+          railway up --team <team-id> --project ac04fff6-5dfc-4b8d-9e0c-ff23a5464df6 --environment production --service <service-id>  # Replace with your actual IDs
 
