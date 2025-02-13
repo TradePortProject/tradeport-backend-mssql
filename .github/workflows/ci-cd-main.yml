@@ -60,4 +60,8 @@ jobs:
         run: railway login
 
       - name: Deploy to Railway
-        run: railway up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          export RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
+          railway up
