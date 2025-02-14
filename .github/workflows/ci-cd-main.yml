@@ -39,8 +39,10 @@ jobs:
 
       - name: Print Sonar Token for Debug
         run: echo "Sonar Key: ${{ secrets.SONAR_PROJECT_KEY }}"
+        
       - name: Print Sonar Organization for Debug
         run: echo "Sonar Org: ${{ secrets.SONAR_ORGANIZATION }}"
+        
       - name: Print Sonar Token for Debug
         run: echo "Sonar Token: ${{ secrets.SONAR_TOKEN }}"
         
