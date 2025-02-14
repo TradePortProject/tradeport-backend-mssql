@@ -29,35 +29,20 @@ jobs:
           file: ../tradeport-backend-mssql/Dockerfile
           push: true
           tags: prabhulalithakrishnan/tradeport-backend-mssql:latest  
-
-  deploy:
-    name: Deploy using Docker Compose and Railway
-    needs: [build]
+  sonar:
+    name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Deploy with Docker Compose
-        run: docker-compose -f ../tradeport-backend-mssql/docker-compose.yml up --build -d
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_SERVER: ${{ secrets.DB_SERVER }}
-          DB_DATABASE: ${{ secrets.DB_DATABASE }}
-
-      - name: Install Railway CLI
-        run: curl -fsSL https://railway.app/install.sh | sh
-
-      - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          export RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
-          railway up --team <team-id> --project ac04fff6-5dfc-4b8d-9e0c-ff23a5464df6 --environment production --service <service-id>  # Replace with your actual IDs
+      - name: Set up SonarQube
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=e1509819/tradeport-backend-mssql
+            -Dsonar.organization=e1509819
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            
 
