@@ -36,6 +36,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Print Sonar Token for Debug
+        run: echo "Sonar Key: ${{ secrets.SONAR_PROJECT_KEY }}"
+        run: echo "Sonar Org: ${{ secrets.SONAR_ORGANIZATION }}"
+        run: echo "Sonar Token: ${{ secrets.SONAR_TOKEN }}"
+        
       - name: Set up SonarQube
         uses: sonarsource/sonarcloud-github-action@master
         with:
