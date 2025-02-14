@@ -40,7 +40,7 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.projectKey=tradeport-backend-mssql
+            -Dsonar.projectKey=e1509819_tradeport-backend-mssql
             -Dsonar.organization=e1509819
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
