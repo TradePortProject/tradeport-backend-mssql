@@ -8,7 +8,6 @@ BEGIN
 END
 GO
 
-
 USE [tradeportdb]
 GO
 
@@ -38,6 +37,10 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Notif
 DROP TABLE [dbo].[Notification]
 GO
 /****** Object:  Table [dbo].[Notification]    Script Date: 2/22/2025 10:54:57 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ShoppingCart]') AND type in (N'U'))
+DROP TABLE [dbo].[ShoppingCart]
+GO
+/****** Object:  Table [dbo].[Notification]    Script Date: 2/22/2025 10:54:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -56,7 +59,8 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderDetails]    Script Date: 2/22/2025 10:54:57 PM ******/
+
+/****** Object:  Table [dbo].[OrderDetails]    Script Date: 3/7/2025 12:48:36 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -65,6 +69,8 @@ CREATE TABLE [dbo].[OrderDetails](
 	[OrderDetailID] [uniqueidentifier] NOT NULL,
 	[OrderID] [uniqueidentifier] NOT NULL,
 	[ProductID] [uniqueidentifier] NOT NULL,
+	[ManufacturerID] [uniqueidentifier] NOT NULL,
+	[OrderItemStatus] [int] NOT NULL,
 	[Quantity] [int] NOT NULL,
 	[ProductPrice] [decimal](10, 2) NOT NULL,
 	[IsActive] [bit] NOT NULL,
@@ -78,7 +84,7 @@ CREATE TABLE [dbo].[OrderDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 2/22/2025 10:54:57 PM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 3/7/2025 12:48:36 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -86,7 +92,6 @@ GO
 CREATE TABLE [dbo].[Orders](
 	[OrderID] [uniqueidentifier] NOT NULL,
 	[RetailerID] [uniqueidentifier] NOT NULL,
-	[ManufacturerID] [uniqueidentifier] NULL,
 	[DeliveryPersonnelID] [uniqueidentifier] NULL,
 	[OrderStatus] [int] NOT NULL,
 	[IsActive] [bit] NOT NULL,
@@ -106,6 +111,32 @@ CREATE TABLE [dbo].[Orders](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+/****** Object:  Table [dbo].[ShoppingCart]    Script Date: 3/7/2025 12:48:36 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ShoppingCart](
+	[CartID] [uniqueidentifier] NOT NULL,
+	[ProductID] [uniqueidentifier] NOT NULL,
+	[Status] [int] NOT NULL,
+	[RetailerID] [uniqueidentifier] NOT NULL,
+	[OrderQuantity] [int] NOT NULL,
+	[ManufacturerID] [uniqueidentifier] NOT NULL,
+	[ProductPrice] [decimal](10, 2) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[UpdatedOn] [datetime] NULL,
+	[UpdatedBy] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_ShoppingCart] PRIMARY KEY CLUSTERED 
+(
+	[CartID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
 /****** Object:  Table [dbo].[ProductImage]    Script Date: 2/22/2025 10:54:57 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -166,17 +197,14 @@ CREATE TABLE [dbo].[Users](
 	[Remarks] [nvarchar](500) NULL,
 	[CreatedOn] [datetime] NULL,
 	[IsActive] [bit] NULL,
-	[StrPassword][nvarchar](MAX) NULL,
+	[StrPassword] [varchar](50) NULL,
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[UserID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-INSERT [dbo].[OrderDetails] ([OrderDetailID], [OrderID], [ProductID], [Quantity], [ProductPrice], [IsActive], [CreatedOn], [CreatedBy], [UpdatedOn], [UpdatedBy]) VALUES (N'90d2ba82-5a93-4752-b6fd-08dd534f2662', N'07de6ff5-ad09-4ee7-ffa9-08dd534f25c1', N'163dd606-2643-456c-80fe-1d643381be73', 10, CAST(230.00 AS Decimal(10, 2)), 1, CAST(N'2025-02-22T22:42:36.797' AS DateTime), N'00000000-0000-0000-0000-000000000000', NULL, NULL)
-GO
-INSERT [dbo].[Orders] ([OrderID], [RetailerID], [ManufacturerID], [DeliveryPersonnelID], [OrderStatus], [IsActive], [TotalPrice], [PaymentMode], [PaymentCurrency], [ShippingCost], [ShippingCurrency], [ShippingAddress], [CreatedOn], [CreatedBy], [UpdatedOn], [UpdatedBy]) VALUES (N'07de6ff5-ad09-4ee7-ffa9-08dd534f25c1', N'6d0f5be2-1e4e-47b1-9081-60320b8a9d60', N'1b675eb0-367b-49aa-a92f-6c572c0d7d39', NULL, 1, 1, CAST(2300.00 AS Decimal(10, 2)), 1, N'SGD', CAST(20.00 AS Decimal(10, 2)), N'SGD', N'US', CAST(N'2025-02-22T14:42:34.940' AS DateTime), N'6d0f5be2-1e4e-47b1-9081-60320b8a9d60', NULL, NULL)
-GO
+
 INSERT [dbo].[Products] ([ProductID], [ProductCode], [ManufacturerID], [ProductName], [Description], [Category], [WholesalePrice], [RetailPrice], [Quantity], [RetailCurrency], [WholeSaleCurrency], [ShippingCost], [CreatedOn], [UpdatedOn], [IsActive]) VALUES (N'163dd606-2643-456c-80fe-1d643381be73', N'P002', N'8f487a9e-c9a3-4d28-b477-6542ba235324', N'Smartphone', N'Flagship smartphone', 2, CAST(500.00 AS Decimal(10, 2)), CAST(700.00 AS Decimal(10, 2)), 100, N'USD', N'USD', CAST(15.00 AS Decimal(10, 2)), CAST(N'2025-02-22T22:37:00.557' AS DateTime), CAST(N'2025-02-22T22:37:00.557' AS DateTime), 1)
 INSERT [dbo].[Products] ([ProductID], [ProductCode], [ManufacturerID], [ProductName], [Description], [Category], [WholesalePrice], [RetailPrice], [Quantity], [RetailCurrency], [WholeSaleCurrency], [ShippingCost], [CreatedOn], [UpdatedOn], [IsActive]) VALUES (N'4c2b78c5-6f85-47b0-8fbc-2ed8aa179a4e', N'P005', N'a30a09ba-15b6-4d8e-99a0-16c693e4df78', N'Monitor', N'27-inch 4K monitor', 4, CAST(250.00 AS Decimal(10, 2)), CAST(350.00 AS Decimal(10, 2)), 75, N'USD', N'USD', CAST(25.00 AS Decimal(10, 2)), CAST(N'2025-02-22T22:37:00.557' AS DateTime), CAST(N'2025-02-22T22:37:00.557' AS DateTime), 1)
 INSERT [dbo].[Products] ([ProductID], [ProductCode], [ManufacturerID], [ProductName], [Description], [Category], [WholesalePrice], [RetailPrice], [Quantity], [RetailCurrency], [WholeSaleCurrency], [ShippingCost], [CreatedOn], [UpdatedOn], [IsActive]) VALUES (N'ff457543-6fee-4da6-99a6-4ecd62377733', N'P007', N'e961fd8f-5622-438f-94a8-f850e971abe1', N'Graphics Card', N'High-end gaming GPU', 6, CAST(500.00 AS Decimal(10, 2)), CAST(700.00 AS Decimal(10, 2)), 30, N'USD', N'USD', CAST(30.00 AS Decimal(10, 2)), CAST(N'2025-02-22T22:37:00.557' AS DateTime), CAST(N'2025-02-22T22:37:00.557' AS DateTime), 1)
