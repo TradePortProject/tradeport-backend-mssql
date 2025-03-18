@@ -197,7 +197,8 @@ CREATE TABLE [dbo].[Users](
 	[Remarks] [nvarchar](500) NULL,
 	[CreatedOn] [datetime] NULL,
 	[IsActive] [bit] NULL,
-	[StrPassword] [varchar](50) NULL,
+/****** [StrPassword] [varchar](50) NULL, ******/
+	[StrPassword][nvarchar](MAX) NULL,
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[UserID] ASC
