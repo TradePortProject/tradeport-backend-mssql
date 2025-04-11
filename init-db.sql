@@ -50,9 +50,13 @@ CREATE TABLE [dbo].[Notification](
 	[UserID] [uniqueidentifier] NULL,
 	[Subject] [nvarchar](255) NULL,
 	[Message] [nvarchar](max) NULL,
-	[CreatedOn] [datetime] NULL,
-	[CreatedBy] [uniqueidentifier] NULL,
+	[FromEmail] [nvarchar](100) NULL,
+	[RecipientEmail] [nvarchar](100) NULL,
+	[FailureReason] [nvarchar](255) NULL,
+	[SentTime]  [datetime] NULL,
 	[EmailSend] [bit] NULL,
+	[CreatedOn] [datetime] NULL,
+	[CreatedBy] [uniqueidentifier] NULL
 PRIMARY KEY CLUSTERED 
 (
 	[NotificationID] ASC
@@ -225,4 +229,19 @@ GO
 ALTER TABLE [dbo].[Notification] ADD  DEFAULT (getdate()) FOR [CreatedOn]
 GO
 ALTER TABLE [dbo].[Notification] ADD  DEFAULT ((1)) FOR [EmailSend]
+GO
+
+INSERT INTO [tradeportdb].[dbo].[ProductImage] ([ImageID], [ProductID], [ProductImageURL], [FileName], [FileExtension])
+VALUES 
+(NEWID(), '163DD606-2643-456C-80FE-1D643381BE73', '/uploads/images/smartphone.jpg', 'smartphone.jpg', '.jpg'),
+(NEWID(), '4C2B78C5-6F85-47B0-8FBC-2ED8AA179A4E', '/uploads/images/monitor.jpg', 'monitor.jpg', '.jpg'),
+(NEWID(), 'FF457543-6FEE-4DA6-99A6-4ECD62377733', '/uploads/images/graphicscard.jpg', 'graphicscard.jpg', '.jpg'),
+(NEWID(), 'CACAED1A-B5E0-4C97-AEB6-570572883D5D', '/uploads/images/mechanicalkeyboard.jpg', 'mechanicalkeyboard.jpg', '.jpg'),
+(NEWID(), '5FC39A2D-1CA7-4A4B-87DA-5ECF7A82ECA7', '/uploads/images/bluetoothspeaker.jpg', 'bluetoothspeaker.jpg', '.jpg'),
+(NEWID(), '53CFADEF-5125-4DF4-99CC-7F45D1EC4BE6', '/uploads/images/externalharddrive.jpg', 'externalharddrive.jpg', '.jpg'),
+(NEWID(), '7D79FCE3-F9F0-4708-99C9-87F9064C0854', '/uploads/images/smartwatch.jpg', 'smartwatch.jpg', '.jpg'),
+(NEWID(), 'E34C7C40-66FF-4AE2-8950-8D12F91280B2', '/uploads/images/laptop.jpg', 'laptop.jpg', '.jpg'),
+(NEWID(), '508E850B-676E-4997-B0B9-C6A2048C872B', '/uploads/images/gamingchair.jpg', 'gamingchair.jpg', '.jpg'),
+(NEWID(), '9106DA5E-4655-4C40-B7EB-D0320FAE06A1', '/uploads/images/wirelessmouse.jpg', 'wirelessmouse.jpg', '.jpg');
+
 GO
