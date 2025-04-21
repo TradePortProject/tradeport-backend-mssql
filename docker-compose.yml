@@ -1,5 +1,6 @@
 services:
   mssql:
+    image: mssql
     build: .
     container_name: mssql
     ports:
